@@ -16,30 +16,23 @@ import java.util.*;
 public class User implements UserDetails {
 
     @Id
+    @Column(name = "userId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "Password should not be empty")
-    private String password;
+    @Column(name = "userPassword")
+    private String userPassword;
 
-    private boolean enabled;
-
-    @Column(name = "name")
+    @Column(name = "userName", unique = true)
     @NotEmpty(message = "Name should not be empty")
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
-    private String name;
+    private String userName;
 
-    @Column(name = "age")
-    @Min(value = 0, message = "Age should be greater than 0")
-    private int age;
-
-    @Column(name = "email")
-    @NotEmpty(message = "Email should not be empty")
-    @Email(message = "Email should be valid")
-    private String email;
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles")
+    @JoinTable(name = "users_roles",
+                joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "userId"),
+                inverseJoinColumns =  @JoinColumn(name = "role_id", referencedColumnName = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
     public boolean persisted() {
@@ -47,22 +40,6 @@ public class User implements UserDetails {
     }
 
     public User() {
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public Long getId() {
@@ -74,23 +51,26 @@ public class User implements UserDetails {
     }
 
     public String getName() {
-        return name;
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String userName) {
+        this.userName = userName;
     }
 
     public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRoles(Role role) {
+        if(this.roles == null) {
+            roles = new HashSet<>();
+        }
+        this.roles.add(role);
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 
     public boolean hasRole(int roleId) {
@@ -118,11 +98,11 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return userName;
     }
 
     public String getPassword() {
-        return password;
+        return userPassword;
     }
 
 
@@ -143,14 +123,8 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return true;
     }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-
 
 
     @Override
@@ -158,23 +132,19 @@ public class User implements UserDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id && Objects.equals(email, user.email);
+        return id == user.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", password='" + password + '\'' +
-                ", enabled=" + enabled +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", email='" + email + '\'' +
+                ", name='" + userName + '\'' +
                 '}';
     }
 }

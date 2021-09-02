@@ -24,5 +24,4 @@ public class MySpringMvcDispatcherSerlvetIntitializer extends AbstractAnnotation
         return new String[]{"/"};
     }
 
-
 }

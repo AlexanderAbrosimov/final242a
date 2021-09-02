@@ -26,22 +26,15 @@ public class DataInitializer {
       Role role = new Role();
       role.setId(1L);
       role.setName("ROLE_ADMIN");
-      Set<Role> roles = new HashSet<>();
-      roles.add(role);
 
       User user = new User();
       user.setId(1L);
-      user.setName("Alexander");
-      user.setAge(23);
-      user.setEmail("root");
+      user.setName("root");
       user.setPassword("1");
-      user.setRoles(roles);
-      user.setEnabled(true);
-
+      user.setRoles(role);
+      user.isEnabled();
 
       userService.save(user);
-
-
 
     }
 }
