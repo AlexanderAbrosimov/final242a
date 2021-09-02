@@ -23,18 +23,18 @@ public class DataInitializer {
     @PostConstruct
     private void init() {
 
-      Role role = new Role();
-      role.setId(1L);
-      role.setName("ROLE_ADMIN");
-
-      User user = new User();
-      user.setId(1L);
-      user.setName("root");
-      user.setPassword("1");
-      user.setRoles(role);
-      user.isEnabled();
-
-      userService.save(user);
+//      Role role = new Role();
+//      role.setId(1L);
+//      role.setName("ROLE_ADMIN");
+//
+//      User user = new User();
+//      user.setId(1L);
+//      user.setName("root");
+//      user.setPassword("1");
+//      user.setRoles(role);
+//      user.isEnabled();
+//
+//      userService.save(user);
 
     }
 }

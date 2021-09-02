@@ -2,6 +2,7 @@ package pp.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -12,22 +13,21 @@ import java.io.IOException;
 import java.util.Set;
 
 @Component
-public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
+    // Spring Security использует объект Authentication, пользователя авторизованной сессии.
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest,
+                                        HttpServletResponse httpServletResponse,
                                         Authentication authentication) throws IOException, ServletException {
-
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
 
         if (roles.contains("ROLE_ADMIN")) {
-            setDefaultTargetUrl("/admin");
+            httpServletResponse.sendRedirect("/admin");
         } else if(roles.contains("ROLE_USER")) {
-            setDefaultTargetUrl("/user");
+            httpServletResponse.sendRedirect("/user");
         } else {
-            setDefaultTargetUrl("/login");
+            httpServletResponse.sendRedirect("/login");
         }
-
-        super.onAuthenticationSuccess(request, response, authentication);
     }
 }
