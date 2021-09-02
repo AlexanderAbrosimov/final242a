@@ -15,17 +15,13 @@ public class Role implements Serializable, GrantedAuthority {
     @Id
     @Column(name = "roleId", unique = true)
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    protected Long id;
+    protected Long roleId;
 
     @Column(name = "roleName", unique = true)
     private String roleName;
 
     @ManyToMany(mappedBy = "roles")
     private List<User> users = new ArrayList<>();
-
-    public boolean persisted() {
-        return id != null;
-    }
 
     public Role() {
     }
@@ -43,11 +39,11 @@ public class Role implements Serializable, GrantedAuthority {
     }
 
     public Long getId() {
-        return id;
+        return roleId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(Long roleId) {
+        this.roleId = roleId;
     }
 
     @Override
@@ -60,18 +56,18 @@ public class Role implements Serializable, GrantedAuthority {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Role role = (Role) o;
-        return id == role.id && Objects.equals(roleName, role.roleName);
+        return roleId == role.roleId && Objects.equals(roleName, role.roleName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, roleName);
+        return Objects.hash(roleId, roleName);
     }
 
     @Override
     public String toString() {
         return "Role{" +
-                "id=" + id +
+                "id=" + roleId +
                 ", name='" + roleName + '\'' +
                 '}';
     }
