@@ -3,6 +3,7 @@ package pp.config;
 import org.springframework.stereotype.Component;
 import pp.model.Role;
 import pp.model.User;
+import pp.service.RoleService;
 import pp.service.UserService;
 
 import javax.annotation.PostConstruct;
@@ -12,9 +13,11 @@ import java.util.Set;
 @Component
 public class DataInitializer {
     private final UserService userService;
+    private final RoleService roleService;
 
-    public DataInitializer(UserService userService) {
+    public DataInitializer(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     @PostConstruct
